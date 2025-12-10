@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Electrical Machines Q&A{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: linear-gradient(120deg, #e5ecf3 0%, #f7f9fc 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hero-section {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+    }
+
+    .hero-content {
+        background: rgba(255, 255, 255, 0.98);
+        border-radius: 20px;
+        padding: 60px 40px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        max-width: 700px;
+        width: 100%;
+        text-align: center;
+        animation: fadeInUp 0.8s ease;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .display-4 { font-weight: 700; color: #1e3c72; margin-bottom: 20px; }
+    .lead { color: #4a5568; font-size: 1.25rem; margin-bottom: 30px; }
+    .btn-custom {
+        padding: 15px 40px; font-size: 1.1rem; border-radius: 50px; font-weight: 600;
+        transition: all 0.3s ease; border: none;
+    }
+    .btn-custom:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+    .btn-primary.btn-custom { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; }
+    .btn-outline-primary.btn-custom {
+        border: 2px solid #1e3c72; color: #1e3c72; background: transparent;
+    }
+    .btn-outline-primary.btn-custom:hover {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white; border-color: transparent;
+    }
+
+    @media (max-width: 768px) {
+        .hero-content { padding: 40px 30px; }
+        .display-4 { font-size: 2rem; }
+        .btn-custom { padding: 12px 30px; font-size: 1rem; }
+    }
+
+    @media (max-width: 576px) {
+        .hero-content { padding: 30px 20px; }
+        .display-4 { font-size: 1.75rem; }
+        .btn-custom { width: 100%; margin-bottom: 10px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="hero-content">
+        <h1 class="display-4">⚡ Electrical Machines Q&A</h1>
+        <p class="lead">Ask questions about electrical machines and get instant AI-powered answers!</p>
+        <a href="/ask/" class="btn btn-primary btn-custom">Ask a Question</a>
+    </div>
+</div>
+{% endblock %}
