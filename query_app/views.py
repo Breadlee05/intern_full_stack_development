@@ -7,12 +7,31 @@ from .models import Question
 import requests
 import os
 from dotenv import load_dotenv
-import json
 
-import requests
+
+def is_electrical_machine_question(question):
+    """Check if the question is related to electrical machines"""
+    electrical_keywords = [
+        'motor', 'transformer', 'generator', 'induction', 'synchronous', 
+        'rotor', 'stator', 'armature', 'electrical', 'machine', 'ac', 'dc',
+        'voltage', 'current', 'power', 'winding', 'flux', 'torque', 
+        'alternator', 'dynamo', 'capacitor', 'inductor', 'commutator',
+        'slip', 'frequency', 'phase', 'coil', 'magnetic', 'electromagnetic',
+        'stepper', 'servo', 'bldc', 'brushless', 'single phase', 'three phase',
+        'starter', 'controller', 'drive', 'excitation'
+    ]
+    
+    question_lower = question.lower()
+    return any(keyword in question_lower for keyword in electrical_keywords)
+
 
 def get_ai_answer(question):
-    """Get answer from Groq Free AI (LLaMA 3)"""
+    """Get answer from Groq AI (LLaMA 3) - Only for electrical machine questions"""
+    
+
+    if not is_electrical_machine_question(question):
+        return "I can only answer questions related to electrical machines such as motors, transformers, generators, and their principles. Please ask a question about electrical machines."
+    
     try:
         load_dotenv()  
         api_key = os.getenv("GROQ_API_KEY")  
@@ -20,9 +39,9 @@ def get_ai_answer(question):
         url = "https://api.groq.com/openai/v1/chat/completions"
 
         headers = {
-    "Authorization": f"Bearer {api_key}",
-    "Content-Type": "application/json"
-}
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
 
         data = {
             "model": "llama-3.1-8b-instant",
@@ -30,9 +49,11 @@ def get_ai_answer(question):
                 {
                     "role": "system",
                     "content": (
-                        "You are an expert in electrical machines including "
+                        "You are an expert ONLY in electrical machines including "
                         "DC motors, AC motors, induction motors, synchronous motors, transformers, "
-                        "generators, and machine principles. Provide clear, accurate, technical answers."
+                        "generators, stepper motors, servo motors, and their operating principles. "
+                        "Provide clear, accurate, technical answers ONLY about electrical machines. "
+                        "If asked about anything else, politely decline and redirect to electrical machines topics."
                     )
                 },
                 {"role": "user", "content": question}
@@ -53,7 +74,6 @@ def get_ai_answer(question):
         return f"Error: {str(e)}"
 
 
-
 def home(request):
     """Render the home page"""
     return render(request, "home.html")
@@ -68,7 +88,7 @@ def ask_question(request):
             messages.error(request, "Please enter a question.")
             return redirect('/ask/')
         
-        
+    
         answer = get_ai_answer(question_text)
 
     
@@ -85,7 +105,7 @@ def ask_question(request):
 
         return redirect('/ask/')
 
-    # GET request
+    
     last_question = request.session.pop('last_question', None)
     last_answer = request.session.pop('last_answer', None)
 
